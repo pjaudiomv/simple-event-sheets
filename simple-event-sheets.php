@@ -56,9 +56,9 @@ class SimpleEventSheetsPlugin
             wp_enqueue_script('simple-event-sheets-js', plugin_dir_url(__FILE__) . "src/assets/js/simple-event-sheets.js", ['jquery'], '1.0', true);
             wp_localize_script('simple-event-sheets-js', 'simpleEventSheetsParams', [
                 'SHEET_ID' => esc_js(get_option('simple_event_sheets_sheet_id')),
-                'SHEET_NAME' => esc_js(get_option('simple_event_sheets_truck_sheet_name')),
-                'API_KEY' => esc_js(get_option('simple_event_sheets_truck_google_api_key')),
-                'SHOW_PASSED_EVENTS' => get_option('simple_event_sheets_truck_passed_events_checkbox'),
+                'SHEET_NAME' => esc_js(get_option('simple_event_sheets_sheet_name')),
+                'API_KEY' => esc_js(get_option('simple_event_sheets_google_api_key')),
+                'SHOW_PASSED_EVENTS' => get_option('simple_event_sheets_passed_events_checkbox'),
                 'EVENTS' => $event->optionalGetEvents()
             ]);
         }

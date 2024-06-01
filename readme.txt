@@ -18,6 +18,7 @@ SHORTCODE
     * Ensure your Google Sheet has the row headers: `date, name, url, event_info, truck_info`. The date should be formatted as mm/dd/yyyy. Implement data validation on the date and url rows to prevent errors. Note: This plugin also offers built-in data validation.
     * Regarding the Google API Key: You'll need an API key with Spreadsheet access. The sheet should either be set to "anyone with the link can view" or you should add a service user. If you're utilizing server-side event loading, restrict the key by server IP. For client-side loading, restrict the key by domain.
 
+You can use this Google Sheet as a template if wanted, it includes data and url validation to help ensure good data quality. https://docs.google.com/spreadsheets/d/18NnmKKU7P6bFOPEHgyUMWeKQWQJnAfYb5gmn0-fne1E/
 MORE INFORMATION
 
 <a href="https://github.com/pjaudiomv/simple-event-sheets" target="_blank">https://github.com/pjaudiomv/simple-event-sheets</a>
