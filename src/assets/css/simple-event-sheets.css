@@ -1,0 +1,13 @@
+#simple-event-sheets-container ol.circle-bullets {
+  list-style-type: none;
+}
+
+#simple-event-sheets-container ol.circle-bullets-inner {
+  list-style-type: disc;
+  padding-left: 2em;
+  padding-bottom: 1em;
+}
+
+#simple-event-sheets-container h2 {
+  line-height: 1em;
+}

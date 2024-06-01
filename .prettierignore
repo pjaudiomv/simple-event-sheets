@@ -1,0 +1,6 @@
+*.html
+*.min.js
+/build
+/pages
+build
+vars.env
