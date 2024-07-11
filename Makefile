@@ -34,12 +34,22 @@ lint: composer npm ## Lint
 	npm run lint
 	npm run prettier
 
-.PHONY: lint-fix
-lint-fix: composer npm ## Lint Fix
+.PHONY: fmt
+fmt: composer ## PHP Fmt
 	vendor/squizlabs/php_codesniffer/bin/phpcbf
-	npm run lint:fix
-	npm run prettier:fix
+
+.PHONY: docs
+docs:  ## Generate Docs
+	docker run --rm -v $(shell pwd):/data phpdoc/phpdoc:3 --ignore=vendor/ -d . -t docs/
 
 .PHONY: dev
-dev: ## Start dev compose
+dev:  ## Docker up
 	docker-compose up
+
+.PHONY: mysql
+mysql:  ## Runs mysql cli in mysql container
+	docker exec -it $(BASENAME)-db-1 mariadb -u root -psomewordpress wordpress
+
+.PHONY: bash
+bash:  ## Runs bash shell in wordpress container
+	docker exec -it -w /var/www/html $(BASENAME)-wordpress-1 bash

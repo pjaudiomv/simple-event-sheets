@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
-<ruleset name='CARNES'>
-    <description>CARNES Coding Standards</description>
+<ruleset>
+    <description>PJAUDIOMV Coding Standards</description>
     <!--
     If no files or directories are specified on the command line
     your custom standard can specify what files should be checked
@@ -31,18 +31,18 @@
     <ini name="memory_limit" value="128M"/>
 
     <!--
-   You can hard-code ignore patterns directly into your
-   custom standard so you don't have to specify the
-   patterns on the command line.
+    You can hard-code ignore patterns directly into your
+    custom standard, so you don't have to specify the
+    patterns on the command line.
     -->
     <exclude-pattern>vendor/*</exclude-pattern>
     <exclude-pattern>node_modules/*</exclude-pattern>
-
     <!--
     You can add specific global ignores to different
     rules here.
-
     -->
-    <rule ref='PSR12'></rule>
-    <rule ref="PSR1"></rule>
+    <rule ref="WordPress-Core">
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    </rule>
 </ruleset>

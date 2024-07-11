@@ -2,7 +2,8 @@
 
 Contributors: pjaudiomv
 Tags: event listing, events, google sheets
-Tested up to: 6.5.3
+Requires PHP: 8.0
+Tested up to: 6.5.5
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,6 +20,18 @@ SHORTCODE
     * Regarding the Google API Key: You'll need an API key with Spreadsheet access. The sheet should either be set to "anyone with the link can view" or you should add a service user. If you're utilizing server-side event loading, restrict the key by server IP. For client-side loading, restrict the key by domain.
 
 You can use this Google Sheet as a template if wanted, it includes data and url validation to help ensure good data quality. https://docs.google.com/spreadsheets/d/18NnmKKU7P6bFOPEHgyUMWeKQWQJnAfYb5gmn0-fne1E/
+
+### Third-Party Service Disclosure
+
+This plugin relies on a third-party service, Google Sheets, to function properly. The plugin fetches data from Google Sheets under the following circumstances:
+
+- When retrieving event data to display within the application.
+
+## Service Information
+
+- **Service:** [Google Sheets API](https://developers.google.com/sheets/api)
+- **Terms of Use:** [Google API Terms of Use](https://developers.google.com/terms/)
+- **Privacy Policy:** [Google Privacy Policy](https://policies.google.com/privacy)
 
 MORE INFORMATION
 

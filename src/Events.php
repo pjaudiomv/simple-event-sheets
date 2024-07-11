@@ -2,61 +2,66 @@
 
 namespace SimpleEventSheets;
 
-class Events
-{
-    const HTTP_RETRIEVE_ARGS = array(
-        'headers' => array(
-            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0) Gecko/20100101 Firefox/105.0 +SEL'
-        ),
-        'timeout' => 601
-    );
+class Events {
 
-    public function __construct()
-    {
-        add_action('admin_init', array($this, 'registerSettings'));
-        add_action('admin_menu', array($this, 'createMenu'));
-    }
+	const HTTP_RETRIEVE_ARGS = array(
+		'headers' => array(
+			'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0) Gecko/20100101 Firefox/105.0 +SEL',
+		),
+		'timeout' => 601,
+	);
 
-    public function optionalGetEvents(): string
-    {
-        if (!get_option('simple_event_sheets_checkbox')) {
-            return '';
-        }
+	public function __construct() {
+		add_action( 'admin_init', array( $this, 'registerSettings' ) );
+		add_action( 'admin_menu', array( $this, 'createMenu' ) );
+	}
 
-        $sheet_id = get_option('simple_event_sheets_sheet_id');
-        $sheet_name = get_option('simple_event_sheets_sheet_name');
-        $google_api_key = get_option('simple_event_sheets_google_api_key');
+	public function optional_get_events(): string {
+		if ( ! get_option( 'simple_event_sheets_checkbox' ) ) {
+			return '';
+		}
 
-        $queryParams = ['key' => $google_api_key];
-        $url = "https://sheets.googleapis.com/v4/spreadsheets/{$sheet_id}/values/{$sheet_name}";
+		$sheet_id = esc_attr( get_option( 'simple_event_sheets_sheet_id' ) );
+		$sheet_name = esc_attr( get_option( 'simple_event_sheets_sheet_name' ) );
+		$google_api_key = esc_attr( get_option( 'simple_event_sheets_google_api_key' ) );
 
-        $response = $this->getRemoteResponse($url, $queryParams);
+		$query_params = [ 'key' => $google_api_key ];
+		$url = "https://sheets.googleapis.com/v4/spreadsheets/{$sheet_id}/values/{$sheet_name}";
 
-        return $response['status'] === 'error' ? '' : $response['data'];
-    }
+		$response = $this->get_remote_response( $url, $query_params );
 
-    public function renderEvents($atts = [])
-    {
-        return '<div id="simple-event-sheets-container"></div>';
-    }
+		return 'error' === $response['status'] ? '' : $response['data'];
+	}
 
-    private function getRemoteResponse(string $url, array $queryParams = []): array
-    {
-        if (!empty($queryParams)) {
-            $url .= '?' . http_build_query($queryParams);
-        }
-        $response = wp_remote_get($url, self::HTTP_RETRIEVE_ARGS);
+	public function render_events( $atts = [] ): string {
+		return '<div id="simple-event-sheets-container"></div>';
+	}
 
-        if (is_wp_error($response)) {
-            return ['status' => 'error', 'message' => 'Error fetching data from server: ' . $response->get_error_message()];
-        }
+	private function get_remote_response( string $url, array $query_params = [] ): array {
+		if ( ! empty( $query_params ) ) {
+			$url .= '?' . http_build_query( $query_params );
+		}
+		$response = wp_remote_get( $url, self::HTTP_RETRIEVE_ARGS );
 
-        $data = wp_remote_retrieve_body($response);
+		if ( is_wp_error( $response ) ) {
+			return [
+				'status' => 'error',
+				'message' => 'Error fetching data from server: ' . $response->get_error_message(),
+			];
+		}
 
-        if (empty($data)) {
-            return ['status' => 'error', 'message' => 'Received empty data from server.'];
-        }
+		$data = wp_remote_retrieve_body( $response );
 
-        return ['status' => 'success', 'data' => $data];
-    }
+		if ( empty( $data ) ) {
+			return [
+				'status' => 'error',
+				'message' => 'Received empty data from server.',
+			];
+		}
+
+		return [
+			'status' => 'success',
+			'data' => $data,
+		];
+	}
 }
