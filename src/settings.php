@@ -21,10 +21,10 @@ class Settings {
 
 	public function create_menu( string $base_file ): void {
 		add_options_page(
-			esc_html__( 'Simple Event Sheets Settings',  'simple-event-listing-feed-from-google-sheets' ), // Page Title
-			esc_html__( 'Simple Event Sheets',  'simple-event-listing-feed-from-google-sheets' ),          // Menu Title
+			esc_html__( 'Simple Event Sheets Settings', 'simple-event-listing-feed-from-google-sheets' ), // Page Title
+			esc_html__( 'Simple Event Sheets', 'simple-event-listing-feed-from-google-sheets' ),          // Menu Title
 			'manage_options',                  // Capability
-            self::PLUG_SLUG,                   // Menu Slug
+			self::PLUG_SLUG,                   // Menu Slug
 			[ $this, 'draw_settings' ]         // Callback function to display the page content
 		);
 		add_filter( 'plugin_action_links_' . $base_file, [ $this, 'settings_link' ] );
