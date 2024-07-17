@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       Simple Event Listing feed from Google Sheets
- * Plugin URI:        https://wordpress.org/plugins/simple-event-sheets/
+ * Plugin URI:        https://wordpress.org/plugins/simple-event-listing-feed-from-google-sheets/
  * Description:       A plugin that displays Event Listings.
  * Install:           Drop this directory in the "wp-content/plugins/" directory and activate it. You need to specify "[simple_event_sheets]" in the code section of a page or a post.
  * Contributors:      pjaudiomv

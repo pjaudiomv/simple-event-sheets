@@ -4,7 +4,7 @@ namespace SimpleEventSheets;
 
 class Settings {
 
-	private const PLUG_SLUG = 'simple-event-sheets';
+	private const PLUG_SLUG = 'simple-event-listing-feed-from-google-sheets';
 
 	public function __construct() {
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
@@ -21,11 +21,11 @@ class Settings {
 
 	public function create_menu( string $base_file ): void {
 		add_options_page(
-			esc_html__( 'Simple Event Sheets Settings', 'simple-event-sheets' ), // Page Title
-			esc_html__( 'Simple Event Sheets', 'simple-event-sheets' ),          // Menu Title
+			esc_html__( 'Simple Event Sheets Settings',  'simple-event-listing-feed-from-google-sheets' ), // Page Title
+			esc_html__( 'Simple Event Sheets',  'simple-event-listing-feed-from-google-sheets' ),          // Menu Title
 			'manage_options',                  // Capability
-			'simple-event-sheets',                      // Menu Slug
-			[ $this, 'draw_settings' ]            // Callback function to display the page content
+            self::PLUG_SLUG,                   // Menu Slug
+			[ $this, 'draw_settings' ]         // Callback function to display the page content
 		);
 		add_filter( 'plugin_action_links_' . $base_file, [ $this, 'settings_link' ] );
 	}
