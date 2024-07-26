@@ -31,7 +31,7 @@ jobs:
       BUILD_DIR: "build"
       DIST_DIR_GITHUB: "dist/github"
       GITHUB_RELEASE_FILENAME: "simple-event-sheets.zip"
-      PLUGIN: "simple-event-sheets"
+      PLUGIN: "simple-event-listing-feed-from-google-sheets"
       MAINFILE: "simple-event-sheets.php"
     needs: [lint]
     permissions:
