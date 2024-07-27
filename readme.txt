@@ -47,6 +47,12 @@ This section describes how to install the plugin and get it working.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Insert the `[simple_event_sheets]` shortcode into your WordPress page or post.
 
+== Screenshots ==
+
+1. screenshot-1.png
+2. screenshot-2.png
+3. screenshot-3.png
+
 == Changelog ==
 
 = 1.0.1 =
