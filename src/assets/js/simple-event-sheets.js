@@ -52,11 +52,11 @@ const ordinalSuffix = (num) => {
 const generateEventName = (event) => {
   if (event.url?.trim() && isValidURL(event.url)) {
     return `<a href="${event.url}" target="_blank">${event.name}</a>${
-      event.truck_info ? ` (${event.truck_info})` : ""
+      event.event_info ? ` (${event.event_info})` : ""
     }`;
   } else {
-    return event.truck_info
-      ? `${event.name} (${event.truck_info})`
+    return event.event_info
+      ? `${event.name} (${event.event_info})`
       : event.name;
   }
 };
@@ -115,7 +115,7 @@ const displayEventsByMonth = (events) => {
 
     groupedEvents[monthYearKey].forEach((event) => {
       const { day } = parseDate(event.date);
-      const info = event.event_info?.trim() ? ` (${event.event_info})` : "";
+      const info = event.day_info?.trim() ? ` ${event.day_info}` : "";
       const eventName = generateEventName(event);
 
       if (previousEventDay !== day) {
