@@ -3,8 +3,8 @@
 Contributors: pjaudiomv
 Tags: event listing, events, google sheets
 Requires PHP: 8.0
-Tested up to: 6.6.0
-Stable tag: 1.0.0
+Tested up to: 6.6.1
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 SHORTCODE
 - Basic Usage: `[simple_event_sheets]`
-    * Ensure your Google Sheet has the row headers: `date, name, url, event_info, truck_info`. The date should be formatted as mm/dd/yyyy. Implement data validation on the date and url rows to prevent errors. Note: This plugin also offers built-in data validation.
+    * Ensure your Google Sheet has the row headers: `date, name, url, event_info, day_info`. The date should be formatted as mm/dd/yyyy. Implement data validation on the date and url rows to prevent errors. Note: This plugin also offers built-in data validation.
+    * `event_info`: Additional information about the event, displayed next to the event name.
+    * `day_info`: Additional information about the day of the event, displayed next to the date.
     * Regarding the Google API Key: You'll need an API key with Spreadsheet access. The sheet should either be set to "anyone with the link can view" or you should add a service user. If you're utilizing server-side event loading, restrict the key by server IP. For client-side loading, restrict the key by domain.
 
 You can use this Google Sheet as a template if wanted, it includes data and url validation to help ensure good data quality. https://docs.google.com/spreadsheets/d/18NnmKKU7P6bFOPEHgyUMWeKQWQJnAfYb5gmn0-fne1E/
@@ -46,6 +48,10 @@ This section describes how to install the plugin and get it working.
 3. Insert the `[simple_event_sheets]` shortcode into your WordPress page or post.
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Updated event and day info.
 
 = 1.0.0 =
 
