@@ -35,7 +35,35 @@ This plugin relies on a third-party service, Google Sheets, to function properly
 - **Terms of Use:** [Google API Terms of Use](https://developers.google.com/terms/)
 - **Privacy Policy:** [Google Privacy Policy](https://policies.google.com/privacy)
 
-MORE INFORMATION
+### Creating a Google API Key with Sheets API Access
+
+1. **Go to the Google Cloud Console:**
+   - Open the Google Cloud Console at [console.cloud.google.com](https://console.cloud.google.com/).
+
+2. **Create a New Project:**
+   - Click on the project dropdown and select "New Project".
+   - Enter a project name and click "Create".
+
+3. **Enable the Sheets API:**
+   - With your project selected, go to the [API Library](https://console.cloud.google.com/apis/library).
+   - Search for "Google Sheets API" and click on it.
+   - Click "Enable" to enable the API for your project.
+
+4. **Create API Credentials:**
+   - Go to the [Credentials](https://console.cloud.google.com/apis/credentials) page.
+   - Click "Create Credentials" and select "API key".
+   - Your API key will be created. Copy it and keep it safe.
+
+5. **Restrict Your API Key:**
+   - Click on the edit icon next to your API key.
+   - Under "Key restrictions", select either "HTTP referrers (web sites)" or IP (server).
+   - Add the referrer(s) for your site, such as `https://yourdomain.com/*` or Server IP.
+   - Save your changes.
+
+ 6. **Set Spreadsheet Access:**
+    - Ensure your Google Sheet is either set to "anyone with the link can view" or you should add a service user with the necessary permissions. This step is crucial for the API key to access the data.
+
+### MORE INFORMATION
 
 <a href="https://github.com/pjaudiomv/simple-event-sheets" target="_blank">https://github.com/pjaudiomv/simple-event-sheets</a>
 
