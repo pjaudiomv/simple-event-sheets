@@ -33,8 +33,108 @@ class Events {
 		return 'error' === $response['status'] ? '' : $response['data'];
 	}
 
+	/**
+	 * Render events shortcode with support for calendar view
+	 */
 	public function render_events( $atts = [] ): string {
-		return '<div id="simple-event-sheets-container"></div>';
+		// Parse shortcode attributes with defaults from settings
+		$default_view = get_option( 'simple_event_sheets_default_view', 'list' );
+		$default_toggle = get_option( 'simple_event_sheets_show_view_toggle', 1 ) ? 'true' : 'false';
+
+		$attributes = shortcode_atts(
+			array(
+				'view' => $default_view,
+				'show_toggle' => $default_toggle,
+			),
+			$atts
+		);
+
+		// Sanitize attributes
+		$view = sanitize_text_field( $attributes['view'] );
+		$show_toggle = sanitize_text_field( $attributes['show_toggle'] );
+
+		// Validate view parameter
+		if ( ! in_array( $view, [ 'list', 'calendar' ], true ) ) {
+			$view = $default_view;
+		}
+
+		// Validate show_toggle parameter
+		if ( ! in_array( $show_toggle, [ 'true', 'false' ], true ) ) {
+			$show_toggle = $default_toggle;
+		}
+
+		// Add container with data attributes for JavaScript
+		$container_classes = 'simple-event-sheets-wrapper';
+		$container_attrs = sprintf(
+			'data-default-view="%s" data-show-toggle="%s"',
+			esc_attr( $view ),
+			esc_attr( $show_toggle )
+		);
+
+		return sprintf(
+			'<div id="simple-event-sheets-container" class="%s" %s></div>',
+			esc_attr( $container_classes ),
+			$container_attrs
+		);
+	}
+
+	/**
+	 * Get script parameters including settings for JavaScript
+	 */
+	public function get_script_params( $atts = [] ): array {
+		// Get global settings
+		$default_view = get_option( 'simple_event_sheets_default_view', 'list' );
+		$default_toggle = get_option( 'simple_event_sheets_show_view_toggle', 1 ) ? 'true' : 'false';
+		$start_day = get_option( 'simple_event_sheets_calendar_start_day', 'sunday' );
+		$max_events = get_option( 'simple_event_sheets_max_events_per_day', 3 );
+
+		// Parse any shortcode attributes
+		$attributes = shortcode_atts(
+			array(
+				'view' => $default_view,
+				'show_toggle' => $default_toggle,
+			),
+			$atts
+		);
+
+		return [
+			'SHEET_ID' => esc_js( get_option( 'simple_event_sheets_sheet_id' ) ),
+			'SHEET_NAME' => esc_js( get_option( 'simple_event_sheets_sheet_name' ) ),
+			'API_KEY' => esc_js( get_option( 'simple_event_sheets_google_api_key' ) ),
+			'SHOW_PASSED_EVENTS' => esc_attr( get_option( 'simple_event_sheets_passed_events_checkbox' ) ),
+			'DEFAULT_VIEW' => esc_js( $attributes['view'] ),
+			'SHOW_TOGGLE' => esc_js( $attributes['show_toggle'] ),
+			'CALENDAR_START_DAY' => esc_js( $start_day ),
+			'MAX_EVENTS_PER_DAY' => absint( $max_events ),
+			'EVENTS' => $this->optional_get_events(),
+		];
+	}
+
+	/**
+	 * Get events data for admin preview or testing (optional method)
+	 */
+	public function get_events_for_preview(): array {
+		$events_json = $this->optional_get_events();
+
+		if ( empty( $events_json ) ) {
+			return [];
+		}
+
+		$data = json_decode( $events_json, true );
+		if ( ! $data || ! isset( $data['values'] ) ) {
+			return [];
+		}
+
+		// Convert to associative array format
+		$headers = $data['values'][0] ?? [];
+		$rows = array_slice( $data['values'], 1 );
+
+		return array_map(
+			function ( $row ) use ( $headers ) {
+				return array_combine( $headers, array_pad( $row, count( $headers ), '' ) );
+			},
+			$rows
+		);
 	}
 
 	private function get_remote_response( string $url, array $query_params = [] ): array {

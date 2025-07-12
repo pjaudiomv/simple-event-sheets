@@ -8,7 +8,7 @@
  * Contributors:      pjaudiomv
  * Author:            pjaudiomv
  * Author URI:        https://github.com/pjaudiomv/simple-event-sheets/
- * Version:           1.0.2
+ * Version:           1.1.0
  * Requires PHP:      8.0
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -62,6 +62,10 @@ class SimpleEventSheetsPlugin {
 					'SHEET_NAME' => esc_js( get_option( 'simple_event_sheets_sheet_name' ) ),
 					'API_KEY' => esc_js( get_option( 'simple_event_sheets_google_api_key' ) ),
 					'SHOW_PASSED_EVENTS' => esc_attr( get_option( 'simple_event_sheets_passed_events_checkbox' ) ),
+					'DEFAULT_VIEW' => esc_js( get_option( 'simple_event_sheets_default_view', 'list' ) ),
+					'SHOW_TOGGLE' => esc_js( get_option( 'simple_event_sheets_show_view_toggle', 1 ) ? 'true' : 'false' ),
+					'CALENDAR_START_DAY' => esc_js( get_option( 'simple_event_sheets_calendar_start_day', 'sunday' ) ),
+					'MAX_EVENTS_PER_DAY' => absint( get_option( 'simple_event_sheets_max_events_per_day', 3 ) ),
 					'EVENTS' => $event->optional_get_events(),
 				]
 			);
