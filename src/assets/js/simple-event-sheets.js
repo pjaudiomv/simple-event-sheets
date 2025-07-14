@@ -3,9 +3,9 @@ const CONFIG = {
     return `https://sheets.googleapis.com/v4/spreadsheets/${simpleEventSheetsParams.SHEET_ID}/values/${simpleEventSheetsParams.SHEET_NAME}?key=${simpleEventSheetsParams.API_KEY}`;
   },
   SHOW_PASSED_EVENTS: simpleEventSheetsParams.SHOW_PASSED_EVENTS ?? false,
-  DEFAULT_VIEW: simpleEventSheetsParams.DEFAULT_VIEW ?? 'list',
-  SHOW_TOGGLE: simpleEventSheetsParams.SHOW_TOGGLE ?? 'true',
-  CALENDAR_START_DAY: simpleEventSheetsParams.CALENDAR_START_DAY ?? 'sunday',
+  DEFAULT_VIEW: simpleEventSheetsParams.DEFAULT_VIEW ?? "list",
+  SHOW_TOGGLE: simpleEventSheetsParams.SHOW_TOGGLE ?? "true",
+  CALENDAR_START_DAY: simpleEventSheetsParams.CALENDAR_START_DAY ?? "sunday",
   MAX_EVENTS_PER_DAY: parseInt(simpleEventSheetsParams.MAX_EVENTS_PER_DAY) || 3,
 };
 
@@ -17,14 +17,12 @@ let currentView = CONFIG.DEFAULT_VIEW;
 const convertSheetDataToListOfDicts = (sheetData) => {
   const headers = sheetData.values?.[0] || [];
   const rows = sheetData.values?.slice(1) || [];
-  return rows.map((row) =>
-    Object.fromEntries(row.map((cell, index) => [headers[index], cell]))
-  );
+  return rows.map((row) => Object.fromEntries(row.map((cell, index) => [headers[index], cell])));
 };
 
 const parseDate = (dateStr) => {
   const [month, day, year] = dateStr.split("/").map(Number);
-  return {month, day, year};
+  return { month, day, year };
 };
 
 const isValidDate = (dateStr) => {
@@ -47,7 +45,7 @@ const isValidURL = (str) => {
 };
 
 const getMonthNameFromNumber = (monthNumber) =>
-  new Date(0, monthNumber - 1).toLocaleString("default", {month: "long"});
+  new Date(0, monthNumber - 1).toLocaleString("default", { month: "long" });
 
 const ordinalSuffix = (num) => {
   const j = num % 10,
@@ -64,47 +62,47 @@ const generateEventName = (event) => {
       event.event_info ? ` (${event.event_info})` : ""
     }`;
   } else {
-    return event.event_info
-      ? `${event.name} (${event.event_info})`
-      : event.name;
+    return event.event_info ? `${event.name} (${event.event_info})` : event.name;
   }
 };
 
 // Calendar utility functions
-const getDaysInMonth = (year, month) => {
-  return new Date(year, month + 1, 0).getDate();
-};
+const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
-const getFirstDayOfMonth = (year, month) => {
-  return new Date(year, month, 1).getDay();
-};
+const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
 
 const formatCalendarTitle = (year, month) => {
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"];
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   return `${monthNames[month]} ${year}`;
 };
 
 const getEventsForDate = (year, month, day) => {
   const targetDate = `${month + 1}/${day}/${year}`;
-  return calendarEvents.filter(event => event.date === targetDate);
+  return calendarEvents.filter((event) => event.date === targetDate);
 };
 
 const isToday = (year, month, day) => {
   const today = new Date();
-  return year === today.getFullYear() &&
-    month === today.getMonth() &&
-    day === today.getDate();
+  return year === today.getFullYear() && month === today.getMonth() && day === today.getDate();
 };
 
-const getCalendarStartDay = () => {
+const getCalendarStartDay = () =>
   // Get start day from CONFIG (default to Sunday = 0)
-  return CONFIG.CALENDAR_START_DAY === 'monday' ? 1 : 0;
-};
-
-const getMaxEventsPerDay = () => {
-  return CONFIG.MAX_EVENTS_PER_DAY;
-};
+  CONFIG.CALENDAR_START_DAY === "monday" ? 1 : 0;
+const getMaxEventsPerDay = () => CONFIG.MAX_EVENTS_PER_DAY;
 
 // Initialize containers with configuration-aware setup
 const initializeContainers = () => {
@@ -119,10 +117,10 @@ const initializeContainers = () => {
   currentView = defaultView;
 
   // Create view toggle (only if enabled)
-  let viewToggleHTML = '';
-  if (showToggle === 'true') {
-    const listActive = defaultView === 'list' ? 'active' : '';
-    const calendarActive = defaultView === 'calendar' ? 'active' : '';
+  let viewToggleHTML = "";
+  if (showToggle === "true") {
+    const listActive = defaultView === "list" ? "active" : "";
+    const calendarActive = defaultView === "calendar" ? "active" : "";
 
     viewToggleHTML = `
       <div class="simple-events-view-toggle">
@@ -133,7 +131,7 @@ const initializeContainers = () => {
   }
 
   // Create calendar container
-  const calendarDisplay = defaultView === 'calendar' ? 'block' : 'none';
+  const calendarDisplay = defaultView === "calendar" ? "block" : "none";
   const calendarHTML = `
     <div class="simple-events-calendar-container" style="display: ${calendarDisplay};">
       <div class="simple-events-calendar-header">
@@ -151,7 +149,7 @@ const initializeContainers = () => {
   `;
 
   // Create list container
-  const listDisplay = defaultView === 'list' ? 'block' : 'none';
+  const listDisplay = defaultView === "list" ? "block" : "none";
   const listHTML = `
     <div class="simple-events-list-container" id="simple-events-list-content" style="display: ${listDisplay};">
       <!-- List will be populated by JavaScript -->
@@ -182,33 +180,33 @@ const renderCalendar = () => {
   const year = currentCalendarDate.getFullYear();
   const month = currentCalendarDate.getMonth();
 
-  const titleElement = document.getElementById('simple-events-calendar-title');
+  const titleElement = document.getElementById("simple-events-calendar-title");
   if (titleElement) {
     titleElement.textContent = formatCalendarTitle(year, month);
   }
 
-  const calendarGrid = document.getElementById('simple-events-calendar-grid');
+  const calendarGrid = document.getElementById("simple-events-calendar-grid");
   if (!calendarGrid) return;
 
-  calendarGrid.innerHTML = '';
+  calendarGrid.innerHTML = "";
 
   // Day headers (adjust based on CONFIG start day setting)
   const startDay = getCalendarStartDay();
-  const dayHeaders = startDay === 1
-    ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayHeaders =
+    startDay === 1
+      ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  dayHeaders.forEach(day => {
-    const dayHeader = document.createElement('div');
-    dayHeader.className = 'simple-events-calendar-day-header';
+  dayHeaders.forEach((day) => {
+    const dayHeader = document.createElement("div");
+    dayHeader.className = "simple-events-calendar-day-header";
     dayHeader.textContent = day;
     calendarGrid.appendChild(dayHeader);
   });
 
   const firstDayOfMonth = getFirstDayOfMonth(year, month);
-  const adjustedFirstDay = startDay === 1
-    ? (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1)
-    : firstDayOfMonth;
+  const adjustedFirstDay =
+    startDay === 1 ? (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1) : firstDayOfMonth;
 
   const daysInMonth = getDaysInMonth(year, month);
   const daysInPrevMonth = getDaysInMonth(year, month - 1);
@@ -236,41 +234,41 @@ const renderCalendar = () => {
 };
 
 const createCalendarDay = (year, month, day, isOtherMonth) => {
-  const dayElement = document.createElement('div');
-  dayElement.className = 'simple-events-calendar-day';
+  const dayElement = document.createElement("div");
+  dayElement.className = "simple-events-calendar-day";
 
   if (isOtherMonth) {
-    dayElement.classList.add('other-month');
+    dayElement.classList.add("other-month");
   }
 
   if (isToday(year, month, day)) {
-    dayElement.classList.add('today');
+    dayElement.classList.add("today");
   }
 
   // Day number
-  const dayNumber = document.createElement('div');
-  dayNumber.className = 'simple-events-day-number';
+  const dayNumber = document.createElement("div");
+  dayNumber.className = "simple-events-day-number";
   dayNumber.textContent = day;
   dayElement.appendChild(dayNumber);
 
   // Events for this day
   const eventsForDay = getEventsForDate(year, month, day);
   if (eventsForDay.length > 0) {
-    dayElement.classList.add('has-events');
+    dayElement.classList.add("has-events");
 
-    const eventsContainer = document.createElement('div');
-    eventsContainer.className = 'simple-events-calendar-events';
+    const eventsContainer = document.createElement("div");
+    eventsContainer.className = "simple-events-calendar-events";
 
     // Use CONFIG max events setting
     const maxVisible = getMaxEventsPerDay();
-    eventsForDay.slice(0, maxVisible).forEach(event => {
-      const eventElement = document.createElement('div');
-      eventElement.className = 'simple-events-calendar-event';
+    eventsForDay.slice(0, maxVisible).forEach((event) => {
+      const eventElement = document.createElement("div");
+      eventElement.className = "simple-events-calendar-event";
       if (eventsForDay.length > 1) {
-        eventElement.classList.add('multi-event');
+        eventElement.classList.add("multi-event");
       }
       eventElement.textContent = event.name;
-      eventElement.addEventListener('click', (e) => {
+      eventElement.addEventListener("click", (e) => {
         e.stopPropagation();
         showEventModal(event);
       });
@@ -278,8 +276,8 @@ const createCalendarDay = (year, month, day, isOtherMonth) => {
     });
 
     if (eventsForDay.length > maxVisible) {
-      const countElement = document.createElement('div');
-      countElement.className = 'simple-events-event-count';
+      const countElement = document.createElement("div");
+      countElement.className = "simple-events-event-count";
       countElement.textContent = `+${eventsForDay.length - maxVisible} more`;
       eventsContainer.appendChild(countElement);
     }
@@ -287,7 +285,7 @@ const createCalendarDay = (year, month, day, isOtherMonth) => {
     dayElement.appendChild(eventsContainer);
 
     // Click handler for day
-    dayElement.addEventListener('click', () => {
+    dayElement.addEventListener("click", () => {
       showDayModal(year, month, day, eventsForDay);
     });
   }
@@ -297,47 +295,57 @@ const createCalendarDay = (year, month, day, isOtherMonth) => {
 
 // Modal functions
 const showEventModal = (event) => {
-  const modal = document.getElementById('simple-events-modal');
-  const title = document.getElementById('simple-events-modal-title');
-  const content = document.getElementById('simple-events-modal-content');
+  const modal = document.getElementById("simple-events-modal");
+  const title = document.getElementById("simple-events-modal-title");
+  const content = document.getElementById("simple-events-modal-content");
 
   if (!modal || !title || !content) return;
 
   title.textContent = event.name;
 
   const eventDate = parseDate(event.date);
-  const formattedDate = `${getMonthNameFromNumber(eventDate.month)} ${eventDate.day}, ${eventDate.year}`;
+  const formattedDate = `${getMonthNameFromNumber(eventDate.month)} ${eventDate.day}, ${
+    eventDate.year
+  }`;
 
   content.innerHTML = `
     <div class="simple-events-event-details">
       <p><strong>Date:</strong> ${formattedDate}</p>
-      ${event.event_info ? `<p><strong>Info:</strong> ${event.event_info}</p>` : ''}
-      ${event.day_info ? `<p><strong>Day Info:</strong> ${event.day_info}</p>` : ''}
-      ${event.url && isValidURL(event.url) ? `<p><strong>Link:</strong> <a href="${event.url}" target="_blank" class="simple-events-event-link">View Details</a></p>` : ''}
+      ${event.event_info ? `<p><strong>Info:</strong> ${event.event_info}</p>` : ""}
+      ${event.day_info ? `<p><strong>Day Info:</strong> ${event.day_info}</p>` : ""}
+      ${
+        event.url && isValidURL(event.url)
+          ? `<p><strong>Link:</strong> <a href="${event.url}" target="_blank" class="simple-events-event-link">View Details</a></p>`
+          : ""
+      }
     </div>
   `;
 
-  modal.classList.add('active');
+  modal.classList.add("active");
 };
 
 const showDayModal = (year, month, day, events) => {
-  const modal = document.getElementById('simple-events-modal');
-  const title = document.getElementById('simple-events-modal-title');
-  const content = document.getElementById('simple-events-modal-content');
+  const modal = document.getElementById("simple-events-modal");
+  const title = document.getElementById("simple-events-modal-title");
+  const content = document.getElementById("simple-events-modal-content");
 
   if (!modal || !title || !content) return;
 
   const formattedDate = `${getMonthNameFromNumber(month + 1)} ${day}, ${year}`;
   title.textContent = `Events for ${formattedDate}`;
 
-  let eventsHTML = '';
+  let eventsHTML = "";
   events.forEach((event, index) => {
     eventsHTML += `
       <div class="simple-events-event-details">
         <h3>${event.name}</h3>
-        ${event.event_info ? `<p><strong>Info:</strong> ${event.event_info}</p>` : ''}
-        ${event.day_info ? `<p><strong>Day Info:</strong> ${event.day_info}</p>` : ''}
-        ${event.url && isValidURL(event.url) ? `<p><strong>Link:</strong> <a href="${event.url}" target="_blank" class="simple-events-event-link">View Details</a></p>` : ''}
+        ${event.event_info ? `<p><strong>Info:</strong> ${event.event_info}</p>` : ""}
+        ${event.day_info ? `<p><strong>Day Info:</strong> ${event.day_info}</p>` : ""}
+        ${
+          event.url && isValidURL(event.url)
+            ? `<p><strong>Link:</strong> <a href="${event.url}" target="_blank" class="simple-events-event-link">View Details</a></p>`
+            : ""
+        }
       </div>
     `;
 
@@ -347,34 +355,26 @@ const showDayModal = (year, month, day, events) => {
   });
 
   content.innerHTML = eventsHTML;
-  modal.classList.add('active');
+  modal.classList.add("active");
 };
 
 const displayEventsByMonth = (events) => {
   const currentYear = new Date().getFullYear();
   const validEvents = events.filter(
-    (event) =>
-      event.date &&
-      event.name &&
-      isValidDate(event.date.trim()) &&
-      event.name.trim()
+    (event) => event.date && event.name && isValidDate(event.date.trim()) && event.name.trim(),
   );
 
   validEvents.sort((a, b) => {
     const dateA = parseDate(a.date);
     const dateB = parseDate(b.date);
-    return (
-      dateA.year - dateB.year ||
-      dateA.month - dateB.month ||
-      dateA.day - dateB.day
-    );
+    return dateA.year - dateB.year || dateA.month - dateB.month || dateA.day - dateB.day;
   });
 
   const groupedEvents = validEvents.reduce((acc, event) => {
     let currentDate = new Date();
     let eventDate = new Date(event.date);
     if (!CONFIG.SHOW_PASSED_EVENTS && eventDate <= currentDate) return acc;
-    const {month, year} = parseDate(event.date);
+    const { month, year } = parseDate(event.date);
     const key = `${month} - ${year}`;
     acc[key] = acc[key] || [];
     acc[key].push(event);
@@ -384,7 +384,7 @@ const displayEventsByMonth = (events) => {
   const eventGroups = document.getElementById("simple-events-list-content");
   if (!eventGroups) return;
 
-  eventGroups.innerHTML = '';
+  eventGroups.innerHTML = "";
 
   if (Object.keys(groupedEvents).length === 0) {
     eventGroups.textContent = "No upcoming events";
@@ -406,7 +406,7 @@ const displayEventsByMonth = (events) => {
     let processedInfoDays = new Set();
 
     groupedEvents[monthYearKey].forEach((event) => {
-      const {day} = parseDate(event.date);
+      const { day } = parseDate(event.date);
       const info = event.day_info?.trim() ? ` ${event.day_info}` : "";
       const eventName = generateEventName(event);
 
@@ -442,70 +442,70 @@ const displayEventsByMonth = (events) => {
 
 const setupEventListeners = () => {
   // View toggle (only if toggle exists)
-  const listBtn = document.getElementById('simple-events-list-btn');
-  const calendarBtn = document.getElementById('simple-events-calendar-btn');
-  const listView = document.querySelector('.simple-events-list-container');
-  const calendarView = document.querySelector('.simple-events-calendar-container');
+  const listBtn = document.getElementById("simple-events-list-btn");
+  const calendarBtn = document.getElementById("simple-events-calendar-btn");
+  const listView = document.querySelector(".simple-events-list-container");
+  const calendarView = document.querySelector(".simple-events-calendar-container");
 
   if (listBtn && calendarBtn && listView && calendarView) {
-    listBtn.addEventListener('click', () => {
-      listBtn.classList.add('active');
-      calendarBtn.classList.remove('active');
-      listView.style.display = 'block';
-      calendarView.style.display = 'none';
-      currentView = 'list';
+    listBtn.addEventListener("click", () => {
+      listBtn.classList.add("active");
+      calendarBtn.classList.remove("active");
+      listView.style.display = "block";
+      calendarView.style.display = "none";
+      currentView = "list";
     });
 
-    calendarBtn.addEventListener('click', () => {
-      calendarBtn.classList.add('active');
-      listBtn.classList.remove('active');
-      calendarView.style.display = 'block';
-      listView.style.display = 'none';
-      currentView = 'calendar';
+    calendarBtn.addEventListener("click", () => {
+      calendarBtn.classList.add("active");
+      listBtn.classList.remove("active");
+      calendarView.style.display = "block";
+      listView.style.display = "none";
+      currentView = "calendar";
       renderCalendar();
     });
   }
 
   // Calendar navigation
-  const prevBtn = document.getElementById('simple-events-prev-month');
-  const nextBtn = document.getElementById('simple-events-next-month');
-  const todayBtn = document.getElementById('simple-events-today-btn');
+  const prevBtn = document.getElementById("simple-events-prev-month");
+  const nextBtn = document.getElementById("simple-events-next-month");
+  const todayBtn = document.getElementById("simple-events-today-btn");
 
   if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
+    prevBtn.addEventListener("click", () => {
       currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
       renderCalendar();
     });
   }
 
   if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
+    nextBtn.addEventListener("click", () => {
       currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
       renderCalendar();
     });
   }
 
   if (todayBtn) {
-    todayBtn.addEventListener('click', () => {
+    todayBtn.addEventListener("click", () => {
       currentCalendarDate = new Date();
       renderCalendar();
     });
   }
 
   // Modal close
-  const modalClose = document.getElementById('simple-events-modal-close');
-  const modal = document.getElementById('simple-events-modal');
+  const modalClose = document.getElementById("simple-events-modal-close");
+  const modal = document.getElementById("simple-events-modal");
 
   if (modalClose) {
-    modalClose.addEventListener('click', () => {
-      modal?.classList.remove('active');
+    modalClose.addEventListener("click", () => {
+      modal?.classList.remove("active");
     });
   }
 
   if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target.id === 'simple-events-modal') {
-        modal.classList.remove('active');
+    modal.addEventListener("click", (e) => {
+      if (e.target.id === "simple-events-modal") {
+        modal.classList.remove("active");
       }
     });
   }
@@ -517,14 +517,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (simpleEventSheetsParams.EVENTS) {
     console.log("Loaded data server side");
-    const events = convertSheetDataToListOfDicts(
-      JSON.parse(simpleEventSheetsParams.EVENTS)
-    );
+    const events = convertSheetDataToListOfDicts(JSON.parse(simpleEventSheetsParams.EVENTS));
     calendarEvents = events;
     displayEventsByMonth(events);
 
     // Render calendar if it's the default view from CONFIG
-    if (currentView === 'calendar') {
+    if (currentView === "calendar") {
       renderCalendar();
     }
 
@@ -539,7 +537,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayEventsByMonth(events);
 
         // Render calendar if it's the default view from CONFIG
-        if (currentView === 'calendar') {
+        if (currentView === "calendar") {
           renderCalendar();
         }
 
